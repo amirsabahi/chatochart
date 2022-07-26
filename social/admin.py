@@ -1,13 +1,11 @@
 from django.contrib import admin
-
-from django import forms
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
-from .models import User
+from .models import *
 
 
 class UserCreationForm(forms.ModelForm):
@@ -57,11 +55,11 @@ class UserAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('email', 'first_name', 'last_name', 'is_admin')
+    list_display = ('email', 'first_name', 'last_name', 'is_admin', 'display_name')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('email', 'mobile', 'password', 'is_mobile_active')}),
-        ('Personal info', {'fields': ('first_name', 'last_name')}),
+        (None, {'fields': ('email', 'mobile', 'password', 'is_mobile_active',)}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'display_name')}),
         ('Permissions', {'fields': ('is_admin', )}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -69,7 +67,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'mobile', 'first_name', 'last_name', 'password1', 'password2'),
+            'fields': ('email', 'mobile', 'first_name', 'last_name', 'about','display_name','show_real_name','invitation_counter', 'password1', 'password2'),
         }),
     )
     search_fields = ('email',)
@@ -82,3 +80,8 @@ admin.site.register(User, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+admin.site.register(Space)
+admin.site.register(SpaceMembership)
+admin.site.register(SpacePolicy)
+admin.site.register(Post)
+admin.site.register(Comment)
